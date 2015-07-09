@@ -2,15 +2,23 @@ import os
 from fnmatch import fnmatch
 
 
-def pygrep(pattern, keyword):
+def f_path(cur_dir, file):
+    return os.path.abspath(os.path.join(cur_dir, file))
+
+
+def get_file(pattern):
     for cur_dir, sub_dirs, files in os.walk('.'):
-        for file in (x for x in files if fnmatch(x, pattern)):
-            full_path = os.path.abspath(os.path.join(cur_dir, file))
-            with open(full_path) as f:
-                try:
-                    yield from ((i, line, full_path) for i, line in enumerate(f) if keyword in line)
-                except UnicodeDecodeError:
-                    pass
+        yield from (f_path(cur_dir, f) for f in files if fnmatch(f, pattern))
+
+
+def pygrep(pattern, keyword):
+    for file in get_file(pattern):
+        try:
+            with open(file) as f:
+                yield from ((i, line, file) for i, line in enumerate(f) if keyword in line)
+        except UnicodeDecodeError:
+            print('Unicode error. Skip file %s' % file)
+
 
 if __name__ == '__main__':
     import sys
