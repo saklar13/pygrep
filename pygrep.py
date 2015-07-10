@@ -2,8 +2,8 @@ import os
 from fnmatch import fnmatch
 
 
-def f_path(dir, file):
-    return os.path.abspath(os.path.join(dir, file))
+def f_path(d, file):
+    return os.path.abspath(os.path.join(d, file))
 
 
 def get_file(pattern):
