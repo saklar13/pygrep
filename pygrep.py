@@ -14,7 +14,7 @@ def get_file(pattern):
 
 def find_in_file(file, keyword):
     with open(file) as f:
-        yield from filter(lambda l: keyword in l[1], enumerate(f))
+        yield from filter(lambda l: keyword in l[1], enumerate(f, 1))
 
 
 def pygrep(pattern, keyword):
